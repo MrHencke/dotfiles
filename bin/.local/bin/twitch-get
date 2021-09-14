@@ -1,0 +1,86 @@
+#!/usr/bin/env python3
+import sys
+import requests
+import xdg.BaseDirectory
+
+api_url = 'https://api.twitch.tv/helix'
+id_url = 'https://id.twitch.tv/oauth2/token'
+api_key = 'cotxsalhlctv8z572f7fant4b0sc3u'
+api_secret = 'gaofxvult280l3sbz8n6btvk5fdswp'
+api_file = xdg.BaseDirectory.xdg_cache_home + "/twitch/api"
+
+
+def get_api_token():
+    """
+    get api token from twitch
+    :return: json object with access_token attribute
+    """
+    data = {
+        "client_id": api_key,
+        "client_secret": api_secret,
+        "grant_type": "client_credentials"
+    }
+    r = requests.post(id_url, data=data)
+    if not r.ok:
+        sys.stderr.write("api error def get_api_token: api request not valid")
+        return False
+
+    return r.json()['access_token']
+
+
+def download_api(access_token, to_send):
+    """
+    print streamers selected who are online
+    :param access_token: access_token from .cache/twitch/api
+    :param to_send: url with streamers
+    :return: print list of streamers who are online
+    """
+    headers = {
+        "Client-ID": api_key,
+        "Authorization": "Bearer " + access_token
+    }
+    r = requests.get(to_send, headers=headers)
+
+    if not r.ok:
+        sys.stderr.write("download_api err: trying to refresh access_token")
+        f = open(api_file, "w")
+        f.write(get_api_token()['access_token'])
+        f.close()
+        return False
+
+    for entry in r.json()['data']:
+        print(entry['user_login'])
+
+def main():
+    """
+    :param streamer_name: streamer names, can be empty.
+
+    if streamer name is none then we want to see everyone who is online currently
+    if streamer name is defined then append parameters
+     to send and call download api with access_token and to_send
+    """
+    try:
+        # try to create file and write access_token
+        f = open(api_file, "x")
+        json_response = get_api_token()
+        f.write(json_response)
+        access_token = json_response
+        f.close()
+    except FileExistsError:
+        # if file does exist then read the file and assign the access_token
+        f = open(api_file, "r")
+        access_token = f.read()
+        f.close()
+
+    # puts each word piped in into array
+    streamers = sys.stdin.read().rsplit()
+
+    # make the url to send
+    tosend = api_url + "/streams?"
+    for streamer in streamers:
+        tosend += "user_login=" + streamer + "&"
+
+    return download_api(access_token, tosend)
+
+
+main()

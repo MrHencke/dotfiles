@@ -1,0 +1,47 @@
+#!/bin/sh
+
+# sudo not required for some system commands
+for x in mount umount pacman updatedb ; do
+	alias $x="sudo $x"
+done
+
+# If filename is typed in, open in program
+alias -s \
+	{mkv,mp4}="mpv"
+
+# Verbosity and settings that you pretty much just always are going to want.
+alias \
+	bat="cat /sys/class/power_supply/cw2015-battery/capacity" \
+	cp="cp -iv" \
+	mv="mv -iv" \
+	rm="rm -vI" \
+	bc="bc -ql" \
+	mkd="mkdir -pv" \
+	ddg="ddgr --unsafe" \
+	yt="youtube-dl --add-metadata -i" \
+	yta="yt -x -f bestaudio/best" \
+	ffmpeg="ffmpeg -hide_banner"
+
+# Colorize commands when possible.
+alias \
+	ls="ls -hN --color=auto --group-directories-first" \
+	grep="grep --color=auto" \
+	diff="diff --color=auto" \
+	ccat="highlight --out-format=ansi"
+
+# These common commands are just too long! Abbreviate them.
+alias \
+	ka="killall" \
+	g="git" \
+	la="ls -A" \
+	ll="ls -lA" \
+	trem="transmission-remote" \
+	r="cortex" \
+	lsf="r livestreamfail" \
+	sdn="sudo shutdown -h now" \
+	f="$FILE" \
+	e="$EDITOR" \
+	v="$EDITOR" \
+	z="zathura" \
+	p="sudo pacman" \
+	SS="sudo systemctl"

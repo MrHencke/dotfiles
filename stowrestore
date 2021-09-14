@@ -1,0 +1,5 @@
+#!/bin/sh
+
+stow --dotfiles --target="$HOME" \
+	zsh \
+	shell

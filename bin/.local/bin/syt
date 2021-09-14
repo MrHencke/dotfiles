@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+
+# LICENSE: CC0
+
+# Dependencies:
+# fzf, jq, youtube-dl as well as bash, cut and cat :P
+# Optionally: mpv to play the videos
+
+N=50
+CONSUMER="mpv"
+MENUER="dmenu -i -l 20"
+
+_help() {
+	cat <<-_EOF
+USAGE yt [OPTIONS] "SEARCH STRING"
+
+Search and play YouTube videos.
+
+  -h, --help         Show this help.
+  -n, --num-results  Number of search results to fetch, defaults to 50.
+  -v, --version      Print version.
+  --                 Stops interpreting the following arguments as options.
+	_EOF
+	exit
+}
+
+while [[ $# -gt 0 ]]
+do
+    case "$1" in
+        -h|--help)
+	    _help
+            ;;
+        -n|--num-results)
+            N="$2"
+            if ! [[ "$N" =~ ^[0-9]+$ ]]
+            then
+                echo "'$N' is not an integer!"
+                exit 1
+            fi
+            shift 2
+            ;;
+        -v|--version)
+            echo "1.0"
+            exit
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+SEARCH="$*"
+
+#Check if there is a standard input and use it.
+[ ! -t 0 ] && SEARCH="$(cat /dev/stdin)"
+
+[ ! -z "$SSH_TTY" ] && MENUER="fzf -i" && [ -z "$SEARCH" ] && _help 	# use fzf if in ssh session
+
+[ ! "$SEARCH" ] && SEARCH="$(printf "" | eval dmenu -p Search:)"	# give dmenu prompt if no string was given
+
+[ -z "$SEARCH" ] && echo "No search given!" 1>&2 && exit 1 		# check if there was a string giveen
+
+JSON="$(youtube-dl ytsearch$N:"$SEARCH" -j --flat-playlist)" 		# search for the video
+TITLE=$(echo $JSON | jq -r ".title" | $MENUER | sed 's/"/\\"/g')				# Display the menu
+URLS=$(echo $JSON | jq -r "select(.title == \"$TITLE\") | .url")	# get the url from title
+
+if [ ! "$URLS" ]; then
+    echo "No video selected!" 1>&2
+    exit 1
+fi
+
+if [ -p /dev/stdout ]; then echo "https://www.youtube.com/watch?v=$URLS"; else
+	$CONSUMER https://www.youtube.com/watch?v=$URLS
+fi

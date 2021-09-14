@@ -1,0 +1,15 @@
+#!/bin/sh
+# say "text"
+# https://cloud.google.com/translate/docs/languages
+
+line="$@"
+
+# Reads form stdin if - is first argument or empty
+if [ -z "$line" ] || [ "$line" = "-" ] ; then
+	# if stdin empty then exit
+	[ -t 0 ] && echo "Usage: say <your sentence>" && exit 255
+	line="$(cat /dev/stdin)"
+	[ -z "$line" ] && exit 255
+fi
+echo $line
+echo "$line" | tr -d "&\"'" | xargs -I{} -s 200 mpv --msg-level=all=no --force-window=no 'http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en&q={}'

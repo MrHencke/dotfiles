@@ -1,0 +1,41 @@
+#!/bin/sh
+apiKey=946f500a # try not to abuse this it is a key that came from the ruby-scripts repo I link to.
+
+usage()
+{
+  cat <<EOF
+Description: Provides relevant information about a certain movie.
+Depends on: curl
+Usage:  command [string]
+
+Examples:
+  movies Argo
+  movies Inception
+EOF
+}
+
+
+if [ -z "$*" ] ; then
+  	usage
+else
+	# Format the inputs to use for the api.
+	movie=$(echo "$@" | tr ' ' '+' | sed 's/-d+//g')
+
+	# make send request
+	url="http://www.omdbapi.com/?t=$movie&apikey=$apiKey&plot=full"
+	checkjq="$(command -v jq)"
+	rawjson="$(curl -s $url)"
+
+	[ "$(echo $rawjson | jq -r '.Response')" = "False" ] && echo $rawjson | jq -r ".Error" && exit 1
+
+	if [ ! -z "$checkjq" ];then
+			echo $rawjson | jq -r '(([.Title," - ",.Year]|(., map(length*"-")))|join("")),
+				.Plot, "",
+				(.? | del(.Title,.Year,.Plot,.Ratings,.Response,.imdbID) | del(.[] | select(.=="N/A")) |
+				to_entries[] | [.[]] | join(":    \t")),
+				(.Ratings[] | [.Source,.Value]|join(": "))'
+	else
+		echo $rawjson  | python -m json.tool
+	fi
+
+fi

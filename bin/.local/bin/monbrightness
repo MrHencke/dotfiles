@@ -1,0 +1,3 @@
+#!/bin/sh
+i=/sys/class/backlight/edp-backlight/brightness
+echo "$(($(cat $i) $1))" > $i

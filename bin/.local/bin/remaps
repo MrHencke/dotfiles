@@ -1,0 +1,37 @@
+#!/bin/sh
+# Sets ctrl to hyper and caps to ctrl. If caps is set to ctrl then it will switch ctrl and hyper. also switches left win/alt keys.
+
+_clearandset() {
+	setxkbmap -option ""
+# 	setxkbmap -option shift:both_capslock
+#	setxkbmap -option altwin:swap_lalt_lwin
+}
+
+_setcapstoctl() {
+	_clearandset
+	setxkbmap -option ctrl:swapcaps_hyper
+	killall xcape 2>/dev/null ; xcape -e 'Control_L=Escape'
+#	_setmodmap
+	echo ctrl_hyper
+	exit
+}
+
+_setcapstohyper() {
+	_clearandset
+	setxkbmap -option caps:hyper
+	pkill -KILL xcape
+	_setmodmap
+	echo caps_hyper
+	exit
+}
+
+_setmodmap() {
+xmodmap -e "clear mod3"
+xmodmap -e "clear mod4"
+xmodmap -e "add mod3 = Hyper_L"
+xmodmap -e "add mod4 = Super_L Super_R"
+}
+
+xset r rate 250 50
+xset -q | grep "Caps Lock:\s*on" && xdotool key Caps_Lock
+(setxkbmap -query | grep -q "ctrl:") && _setcapstohyper || _setcapstoctl

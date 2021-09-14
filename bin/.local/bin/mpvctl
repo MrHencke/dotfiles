@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# This script requires:
+# - that the program socat be installed
+# - that you have the mpvSocket lua script installed in "scripts" folder: https://github.com/wis/mpvSockets
+
+command() {
+    local tosend='{ "command": ['	# JSON preamble.
+    for arg in "$@"; do 		# adding in the parameters.
+        tosend="$tosend \"$arg\","
+    done
+    tosend=${tosend%?}' ] }'		# closing it up.
+    for i in $(ls /tmp/mpvSockets/*); do
+    	echo $tosend | socat - $i;
+    done
+}
+
+case "$1" in
+	stop) command 'quit' ;;
+	play-pause) command 'cucle' 'pause' ;;
+	pause) command 'set' 'pause' 'yes' ;;
+	play) command 'set' 'pause' 'no' ;;
+	unhide) command 'set' 'video' '1' ;;
+	next) command 'playlist_next' ;;
+	previous) command 'playlist_prev' ;;
+	add) shift && for video in "$@"; do command 'loadfile' "$video" 'append-play'; done ;;
+esac

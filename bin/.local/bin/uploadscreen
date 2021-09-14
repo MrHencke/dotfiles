@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+domain="ait.place"
+filename="$(date +%F_%H%M%S_%N).png"
+savedir="${XDG_PICTURES_DIR:-$HOME/Pictures}/screenshots"
+imagepath="$savedir/$filename"
+
+# Make the local dir
+mkdir -p $savedir
+
+# Take the screenshot
+maim --hidecursor --select $imagepath -b 3 --quality 9 &&
+
+# Copy image to clipboard
+xclip -selection clipboard -t "image/png" -i $imagepath &&
+
+# Upload the image to the server
+rsync -aP "$imagepath" $domain:/srv/gemini/content/uploads/ &&
+
+# Copy image url to primary
+echo "https://$domain/uploads/$filename" | xclip -selection primary &&
+
+# Notify when done
+notify-send -a "scrup" "url on clipboard"

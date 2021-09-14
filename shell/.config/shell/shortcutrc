@@ -1,0 +1,13 @@
+#!/bin/sh
+alias \
+	dl="cd ${XDG_DOWNLOAD_DIR:-$HOME/Downloads}" \
+	vid="cd ${XDG_VIDEOS_DIR:-$HOME/Videos}" \
+	doc="cd ${XDG_DOCUMENTS_DIR:-$HOME/Documents}" \
+	pic="cd ${XDG_PICTURES_DIR:-$HOME/Pictures}" \
+	s="cd ~/.local/bin" \
+	c="cd ${XDG_CONFIG_HOME:-$HOME/.config}" \
+	#sl="cd ~/.local/tmp/suckless" \
+	tmp="cd ~/.local/tmp" \
+	media="cd /media" \
+	dot="$XDG_DATA_HOME/dot"
+	hm="cd ${XDG_CONFIG_HOME:-$HOME/}"

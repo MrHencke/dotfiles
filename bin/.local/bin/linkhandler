@@ -1,0 +1,40 @@
+#!/bin/sh
+
+# Feed script a url or file location.
+# If an image, it will view in sxiv,
+# if a video or gif, it will view in mpv
+# if a music file or pdf, it will download,
+# otherwise it opens link in browser.
+
+_parseurl() {
+	echo "$url" | sed "s/.*\///;s/%20/ /g"
+}
+
+# You cant overwrite $1, so make a new variable
+url=$1
+
+# Reads form stdin if - is first argument or empty
+if [ -z "$url" ] || [ "$url" = "-" ] ; then
+	# if stdin empty then exit
+	[ -t 0 ] && exit 1
+	url="$(cat /dev/stdin)"
+	[ -z "$url" ] && exit 1
+fi
+
+file="/tmp/$(echo "$url" | sed "s/.*\///;s/%20/ /g")"
+case "$url" in
+	*mkv|*webm|*mp4|*ogg|*flac|*opus|*mp3?source*|*mp3|*youtube.com*|*clips.twitch.tv*|*twitch.tv*/clips*|*redgifs.com*|*youtu.be*)
+		setsid mpv -quiet "$url" >/dev/null 2>&1 &;;
+
+	*png|*jpg|*jpe|*jpeg|*gif)
+		curl -sL "$url" > "$file" && sxiv "$file"  >/dev/null 2>&1 & ;;
+
+	*pdf|*cbz|*cbr)
+		curl -sL "$url" > "$file" && zathura "$file"  >/dev/null 2>&1 & ;;
+
+	magnet:*|*.torrent)
+		transadd "$url" >/dev/null 2>&1 & ;;
+
+	*)
+		[ -f "$url" ] && setsid -f "$TERMINAL" -e "$EDITOR" "$url" >/dev/null 2>&1 || setsid -f "$BROWSER" "$url" >/dev/null 2>&1 & ;;
+esac

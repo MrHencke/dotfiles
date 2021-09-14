@@ -1,0 +1,7 @@
+#!/bin/sh
+while true; do
+	convert -background none -fill white -font $(fc-match | awk '{print $2}' | tr -d '"') \
+		-size 1000x label:$(date +%R) png:$XDG_CACHE_HOME/walldate.png && \
+	hsetroot -solid "#111111" -center "$XDG_CACHE_HOME/walldate.png"
+	sleep $(( 60 - $(date +%S) ))s;
+ done

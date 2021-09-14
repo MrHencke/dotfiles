@@ -1,0 +1,6 @@
+#!/bin/sh
+
+RSSFILE="${XDG_CONFIG_HOME:-$HOME/.config}/newsboat/urls"
+! echo "$1" | grep "https*://\S\+\.[A-Za-z]\+\S*" >/dev/null && exit
+
+if awk '{print $1}' "$RSSFILE" | grep "^$1$" >/dev/null; then; else echo "$1" >> "$RSSFILE";fi

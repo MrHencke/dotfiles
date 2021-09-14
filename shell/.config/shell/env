@@ -1,0 +1,76 @@
+#!/bin/sh
+# Profile file. Runs on login.
+
+# XDG env
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_STATE_HOME="$HOME/.local/state"
+export XDG_DESKTOP_DIR="$HOME/"
+export XDG_DOCUMENTS_DIR="$HOME/Documents"
+export XDG_DOWNLOAD_DIR="$HOME/Downloads"
+export XDG_MUSIC_DIR="$HOME/Music"
+export XDG_PICTURES_DIR="$HOME/Pictures"
+export XDG_VIDEOS_DIR="$HOME/Videos"
+
+# Adds `~/.scripts` and all subdirectories to $PATH
+export PATH="$PATH:${$(find ~/.local/bin/ -type d -printf %p:)%%:}"
+
+export EDITOR="code"
+export TERMINAL="konsole"
+export BROWSER="firefox"
+export READER="zathura"
+export FILE="dolphin"
+
+
+# ~/ Clean-up:
+#export XINITRC="$XDG_CONFIG_HOME/x11/xinitrc"
+export HISTFILE="$XDG_CACHE_HOME/bash/history"
+#export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority" # This line will break some DMs.
+#export NOTMUCH_CONFIG="$XDG_CONFIG_HOME/notmuch-config"
+#export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc-2.0"
+#export LESSHISTFILE="-"
+#export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
+#export INPUTRC="$XDG_CONFIG_HOME/shell/inputrc"
+export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+#export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store"
+#export GNUPGHOME="$XDG_DATA_HOME/gnupg"
+#export KODI_DATA="$XDG_DATA_HOME/kodi"
+#export WINEPREFIX="$XDG_DATA_HOME/wineprefixes/default"
+#export GOPATH="$XDG_DATA_HOME/go"
+#export ANSIBLE_CONFIG="$XDG_CONFIG_HOME/ansible/ansible.cfg"
+#export ANDROID_SDK_HOME="$XDG_CONFIG_HOME/android"
+#export ADB_VENDOR_KEY="$XDG_CONFIG_HOME/android"
+#export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
+#export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
+#export CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv"
+#export LYNX_CFG="$XDG_CONFIG_HOME/lynx/config"
+#export EMACSDIR="$XDG_CONFIG_HOME/emacs"
+#export DOOMDIR="$XDG_CONFIG_HOME/doom"
+#export CARGO_HOME="$XDG_DATA_HOME/cargo"
+
+# Other program settings
+export MANPAGER="less -R --use-color -Dd+r -Du+b"
+export MANROFFOPT="-c"
+export LESS='-RXF --use-color -Dd+r$Du+b'
+
+export QT_QPA_PLATFORMTHEME="qt5ct"
+#export SUDO_ASKPASS="$HOME/.local/bin/dpass"
+#export _JAVA_AWT_WM_NONREPARENTING=1	# Fix for Java applications in dwm
+#export FZF_DEFAULT_OPTS="--layout=reverse --height 40%"
+export LESS=-R
+export LESS_TERMCAP_mb="$(printf '%b' '[1;31m')"
+export LESS_TERMCAP_md="$(printf '%b' '[1;36m')"
+export LESS_TERMCAP_me="$(printf '%b' '[0m')"
+export LESS_TERMCAP_so="$(printf '%b' '[01;44;33m')"
+export LESS_TERMCAP_se="$(printf '%b' '[0m')"
+export LESS_TERMCAP_us="$(printf '%b' '[1;32m')"
+export LESS_TERMCAP_ue="$(printf '%b' '[0m')"
+
+[ ! -f ${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc ] && shortcuts >/dev/null 2>&1 &
+
+# Start graphical server on tty1 if not already running.
+#[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC"
+
+# Switch escape and caps if tty:
+#sudo -n loadkeys ~/.local/bin/ttymaps.kmap 2>/dev/null

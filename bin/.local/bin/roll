@@ -1,0 +1,13 @@
+#!/bin/sh
+
+input=$*
+
+[ -z "$input" ] && input=2d20
+
+for request in $input ; do
+	# check if format is correct
+	echo $request| egrep -vq '^[0-9]+d[0-9]+$' && continue
+
+	# Print and roll the dice
+	shuf -r -i 1-$(echo $request|cut -dd -f2) -n $(echo $request|cut -dd -f1)
+done

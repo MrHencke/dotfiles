@@ -1,0 +1,2 @@
+#!/bin/sh
+rsync --exclude=uploads/ -aP --delete ${XDG_DOCUMENTS_DIR:-$HOME/Documents}/gemini/ait_place/content ait.place:/srv/gemini/

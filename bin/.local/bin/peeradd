@@ -1,0 +1,2 @@
+#!/bin/sh
+[ -z "$@" ] && webtorrent download "$(xclip -o)" --mpv || webtorrent download "$@" --mpv

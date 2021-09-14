@@ -1,0 +1,57 @@
+#!/bin/sh
+# Checks the $names file for twitch names and checks if the channel is live and shows a dmenu of live channels.
+# Depends on: streamlink/youtube-dl, dmenu, twitch-get
+
+# File paths
+TWITCH_NAMES=${XDG_CONFIG_HOME:-$HOME/.config}/twitch/names
+TWITCH_LIVE=${XDG_CACHE_HOME:-$HOME/.cache}/twitch/live
+
+_helpinfo() {
+	cat <<-_EOF
+Usage:
+     twitch [ OPTION [...] ]
+
+Options:
+     -a: 	Adds name to the list
+     -e:	Opens the list in ${EDITOR:-vi}
+     -t:	Shows the top streamers
+     -l:	Show the list that will be checked
+     -f:	Force update
+     -h:	Show help
+	_EOF
+}
+
+mkdir -p ${XDG_CONFIG_HOME:-$HOME/.config/share}/twitch ${XDG_CACHE_HOME:-$HOME/.cache}/twitch
+
+# check filedate for the downloaded file
+[ -e $TWITCH_LIVE ] && filedate=$((`date +%s`-`stat -c%Y $TWITCH_LIVE`)) &&
+[ "$filedate" -lt 60 ] && send=false || send=true
+
+#check if options are being parsed
+while getopts "aetlfh" OPT; do
+    case "$OPT" in
+	h) _helpinfo; exit 0;;
+	f) send=true; shift;;
+	t) TWITCH_NAMES=/dev/null; send=true shift;;
+	e) ${EDITOR:-vi} $TWITCH_NAMES; exit 0;;
+	l) cat $TWITCH_NAMES; exit 0;;
+	a) grep "$2" $TWITCH_NAMES >/dev/null && \
+	   echo "$2 is already added" && exit 1 || \
+	   echo "$2" >> $TWITCH_NAMES ; exit 0;;
+    esac
+done
+
+
+# Check if there is a standard input and use it.
+[ ! -t 0 ] && [ -s /dev/stdin ] && TWITCH_NAMES=/dev/stdin && send=true
+
+# Get streamers that are live
+[ $send = true ] && twitch-get < $TWITCH_NAMES > $TWITCH_LIVE
+
+# Use streamlink if installed, but fallback to mpv
+command -v streamlink >/dev/null && TWITCH_PLAYER=streamlink || TWITCH_PLAYER=mpv
+
+#Checks if program is piped into a shell and print output to program
+if [ -p /dev/stdout ]; then cat $TWITCH_LIVE; else
+	dmenu -sb "#8041DE" < $TWITCH_LIVE | xargs -I{} $TWITCH_PLAYER https://twitch.tv/{};
+fi

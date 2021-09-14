@@ -1,0 +1,3 @@
+#!/bin/sh
+[ "$(xrandr | grep 1920+0)" ] && xrandr --output DVI-D-0 --off && exit
+xrandr --output DVI-D-0 --mode 1920x1080 --right-of DP-4

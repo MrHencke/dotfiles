@@ -1,0 +1,76 @@
+# basic
+super + Return
+	$TERMINAL
+
+super + {shift + d,d}
+	{dmenulocate,dmenu_run}
+
+# Program hotkeys
+super + {e,shift + w,shift + a,s,a}
+	$TERMINAL -e sh -c {$FILE,neomutt,stig,ncmpcpp,newsboat}
+
+super + x
+	pkill -x pulsemixer || $TERMINAL -c pulsemixer -g 70X20 -e pulsemixer
+
+super + {shift +} w
+	$BROWSER {$(xclip -o -selection clipboard)}
+
+mod3 + {shift +} p
+	passmenu {--type}
+
+mod3 + t
+	twitch
+
+# mount / unmount
+mod3 + {m,shift + m}
+	{dmenumount,dmenuumount}
+
+super + z
+	dmenuhandler $(xclip -o)
+
+
+
+# Audio, i am using pulseaudio with pulsemixer as a interface. I use mpd for music and mpc for cli interface
+XF86Audio{Raise,Lower}Volume
+	pulsemixer --change-volume {+,-}1
+
+XF86AudioMute
+	pulsemixer --toggle-mute
+
+shift + XF86Audio{Raise,Lower}Volume
+	mpc volume {+,-}1
+
+XF86Audio{Play,Next,Prev}
+	mpc {toggle,next,prev}
+
+# There was no play/pause or next,prev on my 60% keyboard, remove if you have
+super + XF86Audio{RaiseVolume,LowerVolume,Mute}
+	mpc {next,prev,toggle}
+
+
+
+# make sxhkd reload its configuration files:
+super + Escape
+	pkill -USR1 -x sxhkd
+
+# control all mpv videos, needs mpvctl in your $PATH
+super + alt + {p,o,minus}
+	mpvctl {pause,stop,unhide}
+
+# take screenshots and put in in clipboard
+{_,shift +} Print
+	maim {-s,_} | xclip -selection clipboard -t image/png
+
+# Suspend system
+super + shift + F12
+	systemctl suspend
+
+# Compositor toggle
+mod3 + c
+	pkill -x picom || picom
+	# pkill -x xcompmgr || xcompmgr -c -F -r 10
+
+
+# Keyboard toggle
+super + {shift + n, n}
+	{kboptions,kblayout}
