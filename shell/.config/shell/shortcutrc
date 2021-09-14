@@ -6,8 +6,8 @@ alias \
 	pic="cd ${XDG_PICTURES_DIR:-$HOME/Pictures}" \
 	s="cd ~/.local/bin" \
 	c="cd ${XDG_CONFIG_HOME:-$HOME/.config}" \
-	#sl="cd ~/.local/tmp/suckless" \
 	tmp="cd ~/.local/tmp" \
 	media="cd /media" \
-	dot="$XDG_DATA_HOME/dot"
-	hm="cd ${XDG_CONFIG_HOME:-$HOME/}"
+	dot="$XDG_DATA_HOME/dot" \
+	hm="cd ${XDG_CONFIG_HOME:-$HOME/}" \
+	wiki="xdg-open https://wiki.archlinux.org/"

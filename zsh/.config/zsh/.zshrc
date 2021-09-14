@@ -1,12 +1,25 @@
+
+
+#           _
+#   _______| |__  _ __ ___
+#  |_  / __| '_ \| '__/ __|
+# _ / /\__ \ | | | | | (__
+#(_)___|___/_| |_|_|  \___|
+#
+#
+
+
 #Displays the prosseses on top of the terminal
 ps -u $USER -o %cpu,%mem,comm | sort -d -r -k2 | head
 
-# Prompt
-autoload -U colors && colors		# Add colors
-PS1="%{$fg[red]%}%1~ "			# Add path
-[ ! -z "$SSH_TTY" ] && PS1="%m $PS1"	# Add indicator if in ssh session
-[ -n "$NNNLVL" ] && PS1="N$NNNLVL $PS1"	# NNN shell nested spawn level
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 
+#autoload -U colors && colors		# Add colors
+#PS1="%{$fg[red]%}%1~ "			# Add path
+#[ ! -z "$SSH_TTY" ] && PS1="%m $PS1"	# Add indicator if in ssh session
+source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 stty stop undef		# Disable ctrl-s to freeze terminal.
 setopt autocd		# Automatically cd into typed directory.
 setopt interactive_comments
@@ -36,3 +49,6 @@ _comp_options+=(globdots)		# Include hidden files.
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
 # Load zsh-syntax-highlighting; should be last.
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
+
+# To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
+[[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
