@@ -1,8 +1,0 @@
-#!/bin/bash
-shopt -s autocd #Allows you to cd into directory merely by typing the directory name.
-#HISTSIZE= HISTFILESIZE= # Infinite history.
-export PS1="\W \\$ "
-PROMPT_COMMAND='echo -ne "\033]0;$PWD\007"'
-
-[ -f "$HOME/.config/shortcutrc" ] && source "$HOME/.config/shortcutrc"
-[ -f "$HOME/.config/aliasrc" ] && source "$HOME/.config/aliasrc"

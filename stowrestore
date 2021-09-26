@@ -2,4 +2,9 @@
 
 stow --dotfiles --target="$HOME" \
 	zsh \
-	shell
+	shell \
+	neofetch \
+	mpv \
+	pulsemixer \
+	neovim \
+	kitty

@@ -5,6 +5,10 @@ for x in mount umount pacman updatedb ; do
 	alias $x="sudo $x"
 done
 
+packcommand(){
+	tar -cvzf "$1.tar.gz" $2
+}
+
 # If filename is typed in, open in program
 alias -s \
 	{mkv,mp4}="mpv"
@@ -44,4 +48,7 @@ alias \
 	v="$EDITOR" \
 	z="zathura" \
 	p="sudo pacman" \
-	SS="sudo systemctl"
+	SS="sudo systemctl" \
+	pack="packcommand" \
+	code="vscodium"
+

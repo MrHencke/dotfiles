@@ -10,4 +10,8 @@ alias \
 	media="cd /media" \
 	dot="$XDG_DATA_HOME/dot" \
 	hm="cd ${XDG_CONFIG_HOME:-$HOME/}" \
-	wiki="xdg-open https://wiki.archlinux.org/"
+	wiki="xdg-open https://wiki.archlinux.org/" \
+	zfg="cd ~/dot/zsh/.config/zsh" \
+	cachesize="sudo du -sh ~/.cache/" \
+	killcache="rm -rf ~/.cache/*" \
+	aittv="mpv https://tv.ait.place/raw"
