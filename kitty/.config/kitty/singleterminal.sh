@@ -1,0 +1,1 @@
+../../dot/kitty/.config/kitty/singleterminal.sh
