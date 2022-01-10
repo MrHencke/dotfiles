@@ -24,7 +24,8 @@ alias \
 	ddg="ddgr --unsafe" \
 	yt="youtube-dl --add-metadata -i" \
 	yta="yt -x -f bestaudio/best" \
-	ffmpeg="ffmpeg -hide_banner"
+	ffmpeg="ffmpeg -hide_banner" \
+	xclip="xclip -selection c"
 
 # Colorize commands when possible.
 alias \
@@ -39,16 +40,10 @@ alias \
 	g="git" \
 	la="ls -A" \
 	ll="ls -lA" \
-	trem="transmission-remote" \
-	r="cortex" \
-	lsf="r livestreamfail" \
 	sdn="sudo shutdown -h now" \
 	f="$FILE" \
 	e="$EDITOR" \
 	v="$EDITOR" \
-	z="zathura" \
 	p="sudo pacman" \
 	SS="sudo systemctl" \
-	pack="packcommand" \
-	code="vscodium"
-
+	sn="systemctl suspend" 

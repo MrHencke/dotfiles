@@ -1,5 +1,9 @@
 
 
+
+
+
+
 #           _
 #   _______| |__  _ __ ___
 #  |_  / __| '_ \| '__/ __|
@@ -23,14 +27,13 @@ source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 setopt autocd		# Automatically cd into typed directory.
 setopt interactive_comments
 
-
 [ -f "$XDG_CONFIG_HOME/shell/aliasrc" ] && source "$XDG_CONFIG_HOME/shell/aliasrc"
 [ -f "$XDG_CONFIG_HOME/shell/shortcutrc" ] && source "$XDG_CONFIG_HOME/shell/shortcutrc"
 
 # History
 HISTSIZE=10000
 SAVEHIST=10000
-HISTFILE=$XDG_CACHE_HOME/zsh/history
+HISTFILE=$XDG_CACHE_HOME/zsh/.history
 mkdir -p $XDG_CACHE_HOME/zsh
 
 # Do not match urls with local files
@@ -51,18 +54,3 @@ source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zs
 
 # Init p10k
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/opt/anaconda/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/opt/anaconda/etc/profile.d/conda.sh" ]; then
-        . "/opt/anaconda/etc/profile.d/conda.sh"
-    else
-        export PATH="/opt/anaconda/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-

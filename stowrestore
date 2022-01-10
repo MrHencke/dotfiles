@@ -7,4 +7,5 @@ stow --dotfiles --target="$HOME" \
 	mpv \
 	pulsemixer \
 	neovim \
-	kitty
+	kitty \
+	ghci 
